@@ -35,7 +35,10 @@ func commandHelp(cfg *config) error {
 
 func commandMap(cfg *config) error {
     url := cfg.Next
-    req, err := http.NewRequest("GET", url, nil)
+    if url == nil {
+        return fmt.Errorf("Error: URL is a nil pointer")
+    }
+    req, err := http.NewRequest("GET", *url, nil)
     if err != nil {
         return fmt.Errorf("Error formatting request: %w", err)
     }
@@ -70,11 +73,11 @@ func commandMap(cfg *config) error {
 
 func commandMapB(cfg *config) error {
     url := cfg.Previous
-    if url == "" {
-        if strings.Contains(cfg.Next, "offset=0") {
+    if url == nil {
+        if strings.Contains(*cfg.Next, "offset=0") {
             fmt.Println("Currently haven't gone to First Page")
             return nil
-        } else if strings.Contains(cfg.Next, "offset=20") {
+        } else if strings.Contains(*cfg.Next, "offset=20") {
             fmt.Println("Currently on First Page, go to any of the next pages with the 'map' command")
             return nil
         } else {
@@ -82,7 +85,7 @@ func commandMapB(cfg *config) error {
         }
     }
 
-    req, err := http.NewRequest("GET", url, nil)
+    req, err := http.NewRequest("GET", *url, nil)
     if err != nil {
         return fmt.Errorf("Error formatting request: %w", err)
     }
@@ -122,29 +125,29 @@ type cliCommand struct {
 }
 
 type config struct {
-    Next        string
-    Previous    string
-}
-
-type Resource struct {
-    Name        string
-    Url         string
+    Next        *string
+    Previous    *string
 }
 
 type Resources struct {
-    Count       int
-    Next	    string
-    Previous	string
-    Results     []Resource
+    Count       int         `json:"count"`
+    Next	    *string      `json:"next"`
+    Previous	*string      `json:"previous"`
+    Results     []struct {
+        Name    string      `json:"name"`
+        Url     string      `json:"url"`
+    } `json:"results"`
 }
 
 var cmdMap map[string]cliCommand
 
 func main() {
 
+    initial_next :=  "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
+
     cfg := &config{
-        Next: "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20",
-        Previous: "",
+        Next: &initial_next,
+        Previous: nil,
     }
 
     cmdMap = map[string]cliCommand {
