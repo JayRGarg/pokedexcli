@@ -22,7 +22,8 @@ func cleanInput(text string) []string {
 func main() {
 
     cfg := &config.Config{
-        PokeApiClient: pokeapi.NewClient(5 * time.Second),
+        PokeApiClient: pokeapi.NewClient(5 * time.Second, 5 * time.Minute),
+        //PokeApiClient: pokeapi.NewClient(5 * time.Second, 10 * time.Second),
         Next: nil,
         Previous: nil,
     }

@@ -5,7 +5,7 @@ import (
 )
 
 type Config struct {
-    PokeApiClient       pokeapi.Client
+    PokeApiClient       *pokeapi.Client
     Next                *string
     Previous            *string
 }

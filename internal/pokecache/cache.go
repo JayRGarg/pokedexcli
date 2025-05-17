@@ -35,6 +35,7 @@ func (c *Cache) Stop() {
 func (c *Cache) Add(key string, val []byte) {
     c.mu.Lock()
     defer c.mu.Unlock()
+    //time.Sleep(2 * time.Second)
     c.UrlToEntry[key] = cacheEntry{
         createdAt: time.Now(),
         val: val,
