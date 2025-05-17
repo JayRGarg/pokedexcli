@@ -7,26 +7,26 @@ import (
     "github.com/jayrgarg/pokedexcli/internal/config"
 )
 
-func commandMap(cfg *config.Config) error {
+func commandMap(cfg *config.Config, params *[]string) error {
     url := cfg.Next
 
-    locationAreaResouces, err := cfg.PokeApiClient.GetLocationAreaResources(url)
+    locationAreas, err := cfg.PokeApiClient.GetLocationAreasResources(url)
     
     if err != nil {
         return err
     }
 
-    for _, v := range locationAreaResouces.Results {
+    for _, v := range locationAreas.Results {
         fmt.Println(v.Name)
     }
 
-    cfg.Next = locationAreaResouces.Next
-    cfg.Previous = locationAreaResouces.Previous
+    cfg.Next = locationAreas.Next
+    cfg.Previous = locationAreas.Previous
 
     return nil
 }
 
-func commandMapB(cfg *config.Config) error {
+func commandMapB(cfg *config.Config, params *[]string) error {
     url := cfg.Previous
     if url == nil {
         if cfg.Next == nil {// || strings.Contains(*cfg.Next, "offset=0") {
@@ -37,18 +37,18 @@ func commandMapB(cfg *config.Config) error {
         //may need to add logic here? not sure if this case can exist though
     }
 
-    locationAreaResouces, err := cfg.PokeApiClient.GetLocationAreaResources(url)
+    locationAreas, err := cfg.PokeApiClient.GetLocationAreasResources(url)
     
     if err != nil {
         return err
     }
 
-    for _, v := range locationAreaResouces.Results {
+    for _, v := range locationAreas.Results {
         fmt.Println(v.Name)
     }
 
-    cfg.Next = locationAreaResouces.Next
-    cfg.Previous = locationAreaResouces.Previous
+    cfg.Next = locationAreas.Next
+    cfg.Previous = locationAreas.Previous
 
     return nil
 }

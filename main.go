@@ -41,11 +41,18 @@ func main() {
         if len(tokens) == 0 {
             continue
         }
+        var args *[]string
+        if len(tokens) > 1 {
+            rest := tokens[1:]
+            args = &rest
+        } else {
+            args = nil
+        }
         cmd, exists := cmdMap[tokens[0]]
         if !exists {
             fmt.Println("Unknown command")
         } else {
-            err := cmd.Callback(cfg)
+            err := cmd.Callback(cfg, args)
             if err != nil {
                 fmt.Println(err)
             }
