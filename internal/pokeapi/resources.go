@@ -7,6 +7,10 @@ import (
     "encoding/json"
 )
 
+const (
+	baseURL = "https://pokeapi.co/api/v2"
+)
+
 type Resources struct {
     Count       int         `json:"count"`
     Next	    *string      `json:"next"`
@@ -17,17 +21,18 @@ type Resources struct {
     } `json:"results"`
 }
 
-func GetLocationAreaResources (url *string) (Resources, error) {
-    if url == nil {
-        return Resources{}, fmt.Errorf("Error: URL is a nil pointer")
+func (c *Client) GetLocationAreaResources (pageUrl *string) (Resources, error) {
+    tmpUrl := baseURL + "/location-area"//+"/?offset=0&limit=20"
+    if pageUrl != nil {
+        tmpUrl = *pageUrl
     }
+    url := &tmpUrl
     req, err := http.NewRequest("GET", *url, nil)
     if err != nil {
         return Resources{}, fmt.Errorf("Error formatting request: %w", err)
     }
 
-    client := &http.Client{}
-    res, err := client.Do(req)
+    res, err := c.httpClient.Do(req)
     if err != nil {
         return Resources{}, fmt.Errorf("Error performing request from Pokedox API: %w", err)
     }

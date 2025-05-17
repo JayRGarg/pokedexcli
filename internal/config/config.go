@@ -1,6 +1,11 @@
 package config
 
+import (
+    "github.com/jayrgarg/pokedexcli/internal/pokeapi"
+)
+
 type Config struct {
-    Next        *string
-    Previous    *string
+    PokeApiClient       pokeapi.Client
+    Next                *string
+    Previous            *string
 }

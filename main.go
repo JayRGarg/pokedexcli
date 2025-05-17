@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+    "time"
 	"github.com/jayrgarg/pokedexcli/internal/config"
+	"github.com/jayrgarg/pokedexcli/internal/pokeapi"
 	"github.com/jayrgarg/pokedexcli/internal/cli"
 )
 
@@ -17,13 +19,11 @@ func cleanInput(text string) []string {
     return clean
 }
 
-
 func main() {
 
-    initial_next :=  "https://pokeapi.co/api/v2/location-area/?offset=0&limit=20"
-
     cfg := &config.Config{
-        Next: &initial_next,
+        PokeApiClient: pokeapi.NewClient(5 * time.Second),
+        Next: nil,
         Previous: nil,
     }
 
